@@ -110,7 +110,7 @@ public class MemberController {
         // 세션에서 login정보를 제거
         session.removeAttribute("login");
 
-        // 세션을 아예 초기화 (세션만료 시간)
+        // 세션을 아예 초기화 (세션만료 시간 초기화)
         session.invalidate();
         return "redirect:/";
     }
