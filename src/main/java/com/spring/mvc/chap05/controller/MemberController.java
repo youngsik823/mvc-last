@@ -104,5 +104,15 @@ public class MemberController {
         return "redirect:/members/sign-in";
     }
 
+    // 로그아웃 요청 처리
+    @GetMapping("/sign-out")
+    public String signOut(HttpSession session) {
+        // 세션에서 login정보를 제거
+        session.removeAttribute("login");
+
+        // 세션을 아예 초기화 (세션만료 시간)
+        session.invalidate();
+        return "redirect:/";
+    }
 
 }
