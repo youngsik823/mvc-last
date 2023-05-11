@@ -47,6 +47,7 @@ public class BoardService {
 //        board.setViewCount(board.getViewCount() + 1);
         boardRepository.upViewCount(bno);
 
+
         return new BoardDetailResponseDTO(board);
     }
 
