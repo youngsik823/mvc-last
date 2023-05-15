@@ -1,21 +1,19 @@
 package com.spring.mvc.chap05.controller;
 
-import com.spring.mvc.chap05.dto.LoginRequestDTO;
-import com.spring.mvc.chap05.dto.SignUpRequestDTO;
+import com.spring.mvc.chap05.dto.request.LoginRequestDTO;
+import com.spring.mvc.chap05.dto.request.SignUpRequestDTO;
 import com.spring.mvc.chap05.service.LoginResult;
 import com.spring.mvc.chap05.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -62,19 +60,27 @@ public class MemberController {
 
     // 로그인 양식 요청
     @GetMapping("/sign-in")
-    public String signIn() {
+    public String signIn(HttpServletRequest request) {
         log.info("/members/sign-in GET - forwarding to jsp");
+
+        // 요청 정보 헤더 안에는 Referer라는 키가 있는데
+        // 여기 값은 이페이지로 들어올 때 어디에서 왔는지에 대한
+        // URI정보가 기록되어 있음
+        String referer = request.getHeader("Referer");
+        log.info("referer: {}", referer);
+
         return "members/sign-in";
     }
 
     // 로그인 검증 요청
     @PostMapping("/sign-in")
     public String signIn(LoginRequestDTO dto
-                         // 리다이렉션시 2번째 응답에 데이터를 보내기 위함
+             // 리다이렉션시 2번째 응답에 데이터를 보내기 위함
             , RedirectAttributes ra
             , HttpServletResponse response
             , HttpServletRequest request
     ) {
+
         log.info("/members/sign-in POST ! - {}", dto);
 
         LoginResult result = memberService.authenticate(dto);
@@ -83,7 +89,8 @@ public class MemberController {
         if (result == SUCCESS) {
 
             // 서버에서 세션에 로그인 정보를 저장
-           memberService.maintainLoginState(request.getSession(), dto.getAccount());
+            memberService.maintainLoginState(
+                    request.getSession(), dto.getAccount());
 
 //            // 쿠키 만들기
 //            Cookie loginCookie = new Cookie("login", "홍길동");
@@ -103,6 +110,7 @@ public class MemberController {
         // 로그인 실패시
         return "redirect:/members/sign-in";
     }
+
 
     // 로그아웃 요청 처리
     @GetMapping("/sign-out")

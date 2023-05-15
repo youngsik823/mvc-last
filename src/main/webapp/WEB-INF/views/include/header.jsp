@@ -5,7 +5,7 @@
 <header>
     <div class="inner-header">
         <h1 class="logo">
-            <a href="/board/list">
+            <a href="/">
                 <img src="/assets/img/logo.png" alt="로고이미지">
             </a>
         </h1>
@@ -26,12 +26,12 @@
             <li><a href="/board/list">Board</a></li>
             <li><a href="#">Contact</a></li>
 
-            <c:if test="${sessionScope.login == nul}">
+            <c:if test="${login == null}">
                 <li><a href="/members/sign-up">Sign Up</a></li>
                 <li><a href="/members/sign-in">Sign In</a></li>
             </c:if>
-            
-            <c:if test="${sessionScope.login != nul}">
+
+            <c:if test="${login != null}">
                 <li><a href="#">My Page</a></li>
                 <li><a href="/members/sign-out">Sign Out</a></li>
             </c:if>
@@ -41,4 +41,3 @@
 
 </header>
 <!-- //header -->
-
